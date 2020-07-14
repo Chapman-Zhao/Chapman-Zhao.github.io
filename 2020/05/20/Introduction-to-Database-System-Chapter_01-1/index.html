@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/ander-favicon-200.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ander-favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ander-favicon-16.png">
+  <link rel="mask-icon" href="/images/ander-favicon-32.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"anderspace.me","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。最近忙于玩游戏，还喜欢玩一些把风扇带的呼呼响的游戏，究其原因发现这些游戏能把卧室加热。据说，荒野大镖客 2 能把卧室从 19 度加热到 21 度。数据库系统概论开课 5 周了，在放一段时间就真的跟不上了。老师已经讲到第三章末尾了，我才开始学习第一章(不慌不慌) 。学数据库最好的时间就是 5 周以前，其次就是现在。 大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="绪论——数据库系统概述">
+<meta property="og:url" content="https://anderspace.me/2020/05/20/Introduction-to-Database-System-Chapter_01-1/index.html">
+<meta property="og:site_name" content="Ander&#39;s Blog">
+<meta property="og:description" content="前言Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。最近忙于玩游戏，还喜欢玩一些把风扇带的呼呼响的游戏，究其原因发现这些游戏能把卧室加热。据说，荒野大镖客 2 能把卧室从 19 度加热到 21 度。数据库系统概论开课 5 周了，在放一段时间就真的跟不上了。老师已经讲到第三章末尾了，我才开始学习第一章(不慌不慌) 。学数据库最好的时间就是 5 周以前，其次就是现在。 大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-29-1.png">
+<meta property="article:published_time" content="2020-05-20T06:52:50.000Z">
+<meta property="article:modified_time" content="2020-07-14T07:30:45.653Z">
+<meta property="article:author" content="Ander">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-29-1.png">
+
+<link rel="canonical" href="https://anderspace.me/2020/05/20/Introduction-to-Database-System-Chapter_01-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>绪论——数据库系统概述 | Ander's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164620865-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-164620865-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ander's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://anderspace.me/2020/05/20/Introduction-to-Database-System-Chapter_01-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Ander">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ander's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          绪论——数据库系统概述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-20 14:52:50" itemprop="dateCreated datePublished" datetime="2020-05-20T14:52:50+08:00">2020-05-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-14 15:30:45" itemprop="dateModified" datetime="2020-07-14T15:30:45+08:00">2020-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/05/20/Introduction-to-Database-System-Chapter_01-1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/20/Introduction-to-Database-System-Chapter_01-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。最近忙于玩游戏，还喜欢玩一些把风扇带的呼呼响的游戏，究其原因发现这些游戏能把卧室加热。据说，荒野大镖客 2 能把卧室从 19 度加热到 21 度。数据库系统概论开课 5 周了，在放一段时间就真的跟不上了。老师已经讲到第三章末尾了，我才开始学习第一章(不慌不慌) 。学数据库最好的时间就是 5 周以前，其次就是现在。</p>
+<p>大致浏览了一下第一章的目录，内容不多但是都是学习数据库必不可少的概念，这章绝对不能偷懒。前几天在京东买了一本 Database System – A Practical Approach to Design, Implementation, and Management Fifth Edition. 这本书的厚度没有辜负它的名字，我完全提不起看它的兴趣 (尤其是在英文版的情况下) 。现在尽量配合数据库系统概论每天看一点，争取看完 Part 1 。</p>
+<a id="more"></a>
+
+<hr>
+<h1 id="1-1-数据库系统概述"><a href="#1-1-数据库系统概述" class="headerlink" title="1.1 数据库系统概述"></a>1.1 数据库系统概述</h1><h2 id="1-1-1-数据库的-4-个基本概念"><a href="#1-1-1-数据库的-4-个基本概念" class="headerlink" title="1.1.1 数据库的 4 个基本概念"></a>1.1.1 数据库的 4 个基本概念</h2><ol>
+<li><p>数据 (Data) : </p>
+<p>数据是数据库中存储的基本对象。现代计算机系统中数据的概念是广义的，包括但不限于文本 (text)，图形 (gragh) ，图像 (image) ，音频 (audio)，视频 (video)。<strong>数据的定义: 描述事物的符号记录。</strong>数据和关于数据的解释是不可分的。数据的解释是指对数据含义的说明，数据的含义称为数据的语义。<strong>数据与其语义是不可分的。</strong>记录是计算机中表示和存储数据的一种格式或一种方法。例如: (张三，男，199905，江苏省南京市，计算机系，2018) 是一个学生的记录，用来描述学生的数据。</p>
+</li>
+<li><p>数据库 (Database, DB) : </p>
+<p>按一定格式存放数据的仓库。<strong>数据库是长期存储在计算机内，有组织的，可共享的大量数据的集合。数据库中的数据按一定的数据模型组织，描述和存储，具有较小的冗余度 (redundancy) ，较高的数据独立性 (data independancy) 和易扩展性 (scalability)，并可为各种用户共享。</strong>总的来说，数据库具有永久存储、有组织、可共享三个基本特点。</p>
+</li>
+<li><p>数据库管理系统 (Database Management System, DBMS) :</p>
+<ul>
+<li><p>如何科学地组织和存储数据？</p>
+</li>
+<li><p>如何高效地获取和维护数据？</p>
+</li>
+</ul>
+<p><strong>数据库管理系统是位于用户和与操作系统之间的一层数据管理软件。</strong>DBMS 和 OS 一样是计算机的基础软件。</p>
+<p>DBMS 主要功能包括: </p>
+<ul>
+<li>数据定义功能: DBMS 提供<strong>数据定义语言</strong> (Data Definition Language, DDL) ，对数据库中的数据对象的组成与结构定义。</li>
+<li>数据组织、存储和管理: <strong>数据组织和存储的基本目标是提高存储空间利用率和方便存储。</strong>要确定以何种文件结构和存储方式在存储级上组织数据，<strong>实现数据之间的联系</strong>。</li>
+<li>数据操纵功能: DBMS 提供<strong>数据操纵语言</strong> (Data Manipulation Language, DML) ，实现对数据库基本操作，如查询、插入、删除、修改。</li>
+<li>数据库的事务管理和运行功能: <strong>保证数据的安全性、完整性、多用户对数据的并发使用及发生故障后的系统恢复。</strong></li>
+<li>数据库的建立和维护功能: 包括数据库初始数据输入、转换功能。数据库的转储、恢复功能。数据库的重组织、性能监视、分析功能。</li>
+<li>其他功能: DBMS 与网络通信，DBMS 之间的数据转换，异构 DB 之间互访、互操。</li>
+</ul>
+</li>
+<li><p>数据库系统 (Database System, DBS) : </p>
+<p><strong>数据库系统是由 DB ，DBMS (及其应用开发工具) ， 应用程序和数据库管理员 (Database Administrator, DBA) 组成的存储、管理、处理和维护数据的系统。</strong></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-29-1.png" alt=""></p>
+<h2 id="1-1-2-数据管理技术的产生和发展"><a href="#1-1-2-数据管理技术的产生和发展" class="headerlink" title="1.1.2 数据管理技术的产生和发展"></a>1.1.2 数据管理技术的产生和发展</h2><ol>
+<li>人工管理阶段</li>
+<li>文件系统阶段</li>
+<li>数据库系统阶段</li>
+</ol>
+<h2 id="1-1-3-数据库系统的特点"><a href="#1-1-3-数据库系统的特点" class="headerlink" title="1.1.3 数据库系统的特点"></a>1.1.3 数据库系统的特点</h2><ul>
+<li><p>数据 (整体) 结构化 – ( DBMS 与文件系统的本质区别)</p>
+<p><strong>(整体) 结构化意味着数据库中的数据不再仅仅针对某一应用，而是面向整个组织或企业。不仅数据内部是结构化的，数据整体也是结构化的，数据之间是具有联系的。</strong> 这样存取数据的方式更灵活。</p>
+</li>
+<li><p>数据的共享性高、冗余度低且易扩充</p>
+<p>数据共享可以减少数据冗余节约存储空间，还能避免数据之间的不相容性和不一致性 (指同一数据不同副本的值不一样) 。</p>
+</li>
+<li><p>数据独立性高 – (物理独立性和逻辑独立性)</p>
+<ol>
+<li><p>物理独立性: 用户的应用程序与数据库中数据的物理存储是相互独立的。用户无需管数据如何在数据库管理系统中存储，应用程序只需要处理数据的逻辑结构。</p>
+</li>
+<li><p>逻辑独立性: 用户的应用程序与数据库的逻辑结构是相互独立的。</p>
+</li>
+</ol>
+<p>数据独立性由 DBMS 提供的<strong>二级映像功能</strong>保证的。数据与程序的独立把数据的定义从程序中分离出去。</p>
+</li>
+<li><p>数据由 DBMS 统一管理和控制</p>
+<p>数据库共享是并发 (concurrency) 的共享，多用户可同时存取数据。所以数据库的共享会带来安全隐患。 DBMS 还必须包括以下数据控制功能 : </p>
+<ol>
+<li>数据安全性 (security) 保护</li>
+<li>数据完整性 (integrity) 保护</li>
+<li>并发 (concurrency) 控制</li>
+<li>数据库恢复 (recovery)</li>
+</ol>
+</li>
+</ul>
+<p><strong>数据库是长期存储在计算机内有组织、大量、共享的数据集合。他可以供各种用户共享，具有最小冗余度和较高的数据独立性。 DBMS 在数据库建立、运用和维护时对数据库进行统一控制，以保证数据的完整性和安全性，并在多用户同时使用数据库时进行并发控制，在发生故障后对数据库进行恢复。</strong></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>照这个进度我要写到猴年马月才能赶上课程的进度。数据库系统概述这一节有很多概念，为学习这门课程提供了大方向。最后一段我应该要背下来。粗略的估计我需要 3 篇 Blog 写完第一章，第二章需要 5 篇，第三章需要 7 篇。路漫漫其修远兮，吾将上下而求索。</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Ander 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Ander 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/06/Git-Multi-Account-Configuration/" rel="prev" title="Git 多账户配置">
+      <i class="fa fa-chevron-left"></i> Git 多账户配置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-1-数据库系统概述"><span class="nav-number">2.</span> <span class="nav-text">1.1 数据库系统概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-1-数据库的-4-个基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">1.1.1 数据库的 4 个基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-2-数据管理技术的产生和发展"><span class="nav-number">2.2.</span> <span class="nav-text">1.1.2 数据管理技术的产生和发展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-3-数据库系统的特点"><span class="nav-number">2.3.</span> <span class="nav-text">1.1.3 数据库系统的特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ander"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Ander</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chapman-zhao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chapman-zhao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ChapmanAnderZhao@gmail.com" title="E-Mail → mailto:ChapmanAnderZhao@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ander</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'cVXbC22bJepCQeDb4GsW5NVc-MdYXbMMI',
+      appKey     : 'kiupUtmMp2gzLmpOLjI76VxJ',
+      placeholder: "来都来了, 不说点什么？",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

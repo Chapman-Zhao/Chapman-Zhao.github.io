@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/ander-favicon-200.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ander-favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ander-favicon-16.png">
+  <link rel="mask-icon" href="/images/ander-favicon-32.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"anderspace.me","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。去年也曾搭建过 Blog，后来没能坚持一直更新。这次我狠下心，咬了咬牙到 GoDaddy 购买了一个域名。作为一名没有其他兼职的全职大学生，钱还是很重要的。这次一定要坚持下去，要不然对不起自己的钱。 由于武汉疫情的爆发，我已经在家里蹲了近4个月了。在没有口罩的情况下，成功苟到现在。学校通知在5月13号会开学，关于这点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo + Github Page 搭建博客">
+<meta property="og:url" content="https://anderspace.me/2020/04/22/Hexo-Github-Page-Builds-A-Blog/index.html">
+<meta property="og:site_name" content="Ander&#39;s Blog">
+<meta property="og:description" content="前言Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。去年也曾搭建过 Blog，后来没能坚持一直更新。这次我狠下心，咬了咬牙到 GoDaddy 购买了一个域名。作为一名没有其他兼职的全职大学生，钱还是很重要的。这次一定要坚持下去，要不然对不起自己的钱。 由于武汉疫情的爆发，我已经在家里蹲了近4个月了。在没有口罩的情况下，成功苟到现在。学校通知在5月13号会开学，关于这点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-22-1.png">
+<meta property="article:published_time" content="2020-04-22T15:18:38.000Z">
+<meta property="article:modified_time" content="2020-07-14T07:27:32.372Z">
+<meta property="article:author" content="Ander">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-22-1.png">
+
+<link rel="canonical" href="https://anderspace.me/2020/04/22/Hexo-Github-Page-Builds-A-Blog/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Hexo + Github Page 搭建博客 | Ander's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164620865-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-164620865-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ander's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://anderspace.me/2020/04/22/Hexo-Github-Page-Builds-A-Blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Ander">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ander's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo + Github Page 搭建博客
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-22 23:18:38" itemprop="dateCreated datePublished" datetime="2020-04-22T23:18:38+08:00">2020-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-14 15:27:32" itemprop="dateModified" datetime="2020-07-14T15:27:32+08:00">2020-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/04/22/Hexo-Github-Page-Builds-A-Blog/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/22/Hexo-Github-Page-Builds-A-Blog/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Ander’s Blog 用来记录生活，分享技巧，整理知识，构建我的知识体系。去年也曾搭建过 Blog，后来没能坚持一直更新。这次我狠下心，咬了咬牙到 GoDaddy 购买了一个域名。作为一名没有其他兼职的全职大学生，钱还是很重要的。这次一定要坚持下去，要不然对不起自己的钱。</p>
+<p>由于武汉疫情的爆发，我已经在家里蹲了近4个月了。在没有口罩的情况下，成功苟到现在。学校通知在5月13号会开学，关于这点我还是很开心。从前的我，上网和上课是分开的，现在的我，每天在家上网课。对我来说，网课的内容完全不进脑子，我吸收不到知识。（我的作业是怎么完成的呢？）!</p>
+<a id="more"></a>
+
+<hr>
+<h1 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>我们先到 Github 创建一个账户，然后再创建一个仓库 (Repository) 。创建的仓库名必须为 yourname.github.io ，yourname 就是 GitHub 的账户名称。然后点击 Create Repository 完成创建。</p>
+<p><img src="https://raw.githubusercontent.com/Chapman-Zhao/Image-Hosting-Service/master/uPic/2020-4-22-1.png" alt=""></p>
+<p>接着打开电脑的终端 (Terminal) 创建一个空文件夹用来存放 Blog 的所有信息。安装 Node.js 和 Git 到电脑，安装方法很简单，到网络可以查到很多相关资料。我这里就只介绍 Mac 的安装方法。</p>
+<p>我使用 Homebrew 作为我电脑的软件包管理系统，在 Homebrew 下安装软件很轻松，打开终端输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> brew install node git</span></span><br></pre></td></tr></table></figure>
+
+<p>然后安装 Hexo 到电脑，我使用的是将 Hexo 安装到当前文件夹的局部安装的方式: (npm是Node.js默认的、用JavaScript编写的软件包管理系统)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install hexo         <span class="comment"># 局部安装 Hexo</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g hexo-cli  <span class="comment"># 全局安装 Hexo</span></span></span><br></pre></td></tr></table></figure>
+
+<p>使用局部安装的原因是我因某些原因需要经常重装系统，避免每次都要重新安装 Hexo ，所以把 Hexo 安装到 Blog 文件夹，然后将 Blog 文件夹保存到 iCloud 中保存。</p>
+<p>这里使用 GitHub Page 所以直接将 hexo-deployer-git 也一并安装到电脑:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install hexo-deployer-git --save</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在终端中进入开始创建并安装 Hexo 的 Blog 文件夹，输入以下命令建站: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> hexo init &lt;folder&gt;  <span class="comment"># 新建一个网站 &lt;folder&gt; 必须是一个空文件夹</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> &lt;folder&gt;</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install</span></span><br></pre></td></tr></table></figure>
+
+<p> npm install 工作过程: 项目中有一个 package.json 文件，里面有很多组件信息，使用 npm install 将按照 package.json 安装所需要的组件放在生成的 node_modules 文件夹中。</p>
+<p>完成后的文件夹目录是这样的: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml     # 站点配置文件</span><br><span class="line">├── package.json    # 项目的配置信息 (这里包括所需各种模块) </span><br><span class="line">├── scaffolds       # 模版文件夹</span><br><span class="line">├── source          # 资源文件夹</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes          # 主题文件夹</span><br></pre></td></tr></table></figure>
+
+<p>我们主要改动的就是站点配置文件 _config.yml。(YAML是一种可读性高，用来表达数据序列化的格式)</p>
+<h1 id="修改站点配置文件"><a href="#修改站点配置文件" class="headerlink" title="修改站点配置文件"></a>修改站点配置文件</h1><p>首先配置站点的基本信息，根据自己情况填写，如下: </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span>                  <span class="comment"># 站点标题</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">''</span>            <span class="comment"># 站点副标题</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">''</span>         <span class="comment"># 站点描述</span></span><br><span class="line"><span class="attr">keywords:</span>               <span class="comment"># 站点关键字</span></span><br><span class="line"><span class="attr">author:</span>                 <span class="comment"># 作者姓名</span></span><br><span class="line"><span class="attr">language:</span>               <span class="comment"># 站点使用语言</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">''</span>            <span class="comment"># 站点所在时区</span></span><br></pre></td></tr></table></figure>
+
+<p>然后选择使用的主题，我选择的是 nexT 主题，这里先使用默认的 landscape 主题。这里不写 nexT 主题的原因是光配置nexT 主题就可以水至少三篇 Blog 了。(卑微作者，在线水文)</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">landscape</span>        <span class="comment"># 主题名称</span></span><br></pre></td></tr></table></figure>
+
+<p>配置远程库的信息，这里我们选择 GitHub 的仓库作为我们的远程库，利用 Git 将生成站点文件并推送至远程库。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span>                 <span class="comment"># 部署配置</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">'git'</span>												</span><br><span class="line">  <span class="attr">repo:</span>	<span class="string">https://github.com/yourname/yourname.github.io</span></span><br></pre></td></tr></table></figure>
+
+<p>提醒: YAML依靠缩进来确定元素间的从属关系。</p>
+<h1 id="部署站点"><a href="#部署站点" class="headerlink" title="部署站点"></a>部署站点</h1><p>生成静态网页的过程很简单，通过使用 Hexo 中的命令: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> hexo clean         <span class="comment"># 清除缓存文件 (db.json) 和已生成的静态文件 (public)</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> hexo generate	     <span class="comment"># 生成静态文件，可以简写 hexo g </span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> hexo server        <span class="comment"># 启动服务器，在电脑本地查看生成的静态文件，可以简写 hexo s</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> hexo deploy        <span class="comment"># 部署网站到指定的远程库，可以简写 hexo d</span></span></span><br></pre></td></tr></table></figure>
+
+<p>每次修改好配置不要急着部署，先用服务器检查一下生成的页面，确认无误后再部署到远程库。</p>
+<p>需要注意，在部署过程中需要提供远程库所在的 GitHub 账户和密码。可以使用 SSH (通过在网络中创建安全隧道来实现SSH客户端与服务器之间的连接)  ，这里又可以水一篇 Blog 了。</p>
+<p>如果在电脑中已经保存有一个 Git 账号信息，想要使用其他账号提交文件到远程库。Git 的配置信息分为三种: </p>
+<ol>
+<li>系统配置: 包含了适用于系统所有用户和所有库的值</li>
+<li>全局配置: 所有用户共同的配置</li>
+<li>目录配置: 单一库的用户配置</li>
+</ol>
+<p>我推荐在当前目录下保存配置，实现方式: (写入信息到 YourBlog/.deploy_git/.git/config 文件中)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --<span class="built_in">local</span> user.name<span class="string">" "</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --<span class="built_in">local</span> user.email<span class="string">" "</span></span></span><br></pre></td></tr></table></figure>
+
+<p>响应的全局配置和系统配置只要更改 –local 字段的信息就可以了。全局配置 (–global) 系统配置 (–system) 。</p>
+<p>实现多 Git 账户使用多 SSH 的方式在未来可能出现的 SSH 的使用中介绍吧! </p>
+<p>完成 Hexo 的基本设置就可以开始写一篇文章了: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> hexo new [layout] &lt;title&gt;  <span class="comment"># 新建一篇文章 [layout] 是模版文件夹下配置的模版</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这样就在资源文件夹下生成 [layout] 风格的文夹，我们的 Blog 文章就是通过编写这个文件得到的。</p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这篇 Blog 是使用 Hexo + Github Page 搭建 Blog 的最基本的操作，没有涉及安装各种插件，更换主题，修改主题配置文件，使用自定义域名等搭建博客的其他要点。(Flag: 在不远的未来我会将这些都写成 Blog ) </p>
+<p>如果你愿意和我分享的的想法请在下面留言!</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Ander 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Ander 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/Blog/" rel="tag"># Blog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/14/Java-Reflection/" rel="prev" title="Java基础-反射">
+      <i class="fa fa-chevron-left"></i> Java基础-反射
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/28/Hexo-NexT-Theme-Configuration/" rel="next" title="Hexo NexT 主题配置">
+      Hexo NexT 主题配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建环境"><span class="nav-number">2.</span> <span class="nav-text">搭建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改站点配置文件"><span class="nav-number">3.</span> <span class="nav-text">修改站点配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署站点"><span class="nav-number">4.</span> <span class="nav-text">部署站点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ander"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Ander</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chapman-zhao" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chapman-zhao" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ChapmanAnderZhao@gmail.com" title="E-Mail → mailto:ChapmanAnderZhao@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ander</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'cVXbC22bJepCQeDb4GsW5NVc-MdYXbMMI',
+      appKey     : 'kiupUtmMp2gzLmpOLjI76VxJ',
+      placeholder: "来都来了, 不说点什么？",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
